@@ -1,0 +1,57 @@
+{
+  "name": "backend",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/backend/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nx/esbuild:esbuild",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "platform": "node",
+        "outputPath": "dist/apps/backend",
+        "format": ["esm"],
+        "bundle": true,
+        "minify": false,
+        "external": ["@sentry/profiling-node"],
+        "main": "packages/backend/src/app.ts",
+        "tsConfig": "packages/backend/tsconfig.app.json",
+        "assets": ["packages/backend/src/assets"],
+        "generatePackageJson": true,
+        "esbuildConfig": "packages/backend/esbuild.config.ts"
+      },
+      "configurations": {
+        "development": {},
+        "production": {}
+      }
+    },
+    "start": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "packages/backend",
+        "command": "ts-node --swc src/bin/www"
+      }
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "packages/backend",
+        "command": "tsc --noEmit"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "options": {
+        "maxWarnings": 0
+      }
+    },
+    "test": {
+      "executor": "@nx/vite:test",
+      "outputs": ["{options.reportsDirectory}"],
+      "options": {
+        "reportsDirectory": "../../coverage/packages/backend"
+      }
+    }
+  }
+}
